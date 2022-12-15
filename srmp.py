@@ -10,6 +10,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import cross_val_score
 import joblib
 
 def Create_Models():
@@ -49,48 +50,12 @@ def Create_Models():
 	print(nb_model.score(x_test,y_test))
 	print(kn_model.score(x_test,y_test))
 
-	from sklearn.model_selection import cross_val_score
 	print(cross_val_score(lg_model,X,Y,cv=3))
 	print(cross_val_score(dt_model,X,Y,cv=3))
 	print(cross_val_score(rf_model,X,Y,cv=3))
 	print(cross_val_score(sv_model,X,Y,cv=3))
 	print(cross_val_score(nb_model,X,Y,cv=3))
 	print(cross_val_score(kn_model,X,Y,cv=3))
-
-	model_params = {
-	    'svm': {
-		'model': SVC(gamma='auto'),
-		'params' : {
-		    'C': [1,10,20],
-		    'kernel': ['rbf','linear']
-		}  
-	    },
-	    'random_forest': {
-		'model': RandomForestClassifier(),
-		'params' : {
-		    'n_estimators': [1,5,10]
-		}
-	    },
-	    'logistic_regression' : {
-		'model': LogisticRegression(solver='liblinear',multi_class='auto'),
-		'params': {
-		    'C': [1,5,10]
-		}
-	    }
-	}
-	scores = []
-
-	for model_name, mp in model_params.items():
-	    clf =  GridSearchCV(mp['model'], mp['params'], cv=5, return_train_score=False)
-	    clf.fit(X,Y)
-	    scores.append({
-		'model': model_name,
-		'best_score': clf.best_score_,
-		'best_params': clf.best_params_
-	    })
-	    
-	df = pd.DataFrame(scores,columns=['model','best_score','best_params'])
-	df
 
 	# Model Evaluation
 	# accuracy on traing data
@@ -106,10 +71,10 @@ def Create_Models():
 
 	print("Acc on test data : {}".format(test_data_acc))
 	"""Model Creation"""
-	joblib.dump(lg_model,'lg_model.sav')
-	joblib.dump(dt_model,'dt_model.sav')
-	joblib.dump(rf_model,'rf_model.sav')
-	joblib.dump(sv_model,'sv_model.sav')
-	joblib.dump(nb_model,'nb_model.sav')
-	joblib.dump(kn_model,'kn_model.sav')
+	joblib.dump(lg_model,'/models/lg_model.sav')
+	joblib.dump(dt_model,'/models/dt_model.sav')
+	joblib.dump(rf_model,'/models/rf_model.sav')
+	joblib.dump(sv_model,'/models/sv_model.sav')
+	joblib.dump(nb_model,'/models/nb_model.sav')
+	joblib.dump(kn_model,'/models/kn_model.sav')
 
